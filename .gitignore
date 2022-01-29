@@ -1,0 +1,6 @@
+data/**.*
+**/*.settings
+**/*.config
+**/*.model
+__pycache__/**.*
+**/*.pyc
