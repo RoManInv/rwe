@@ -2,7 +2,7 @@ import torch
 
 #RWE model
 class RWE_Model(torch.nn.Module):
-    def __init__(self, embedding_size_input, embedding_size_output, embedding_weights,hidden_size,dropout):
+    def __init__(self, embedding_size_input=0.0, embedding_size_output=0.0, embedding_weights=0.0, hidden_size=0.0, dropout=0.0):
         super(RWE_Model, self).__init__()
         self.embeddings = torch.nn.Embedding.from_pretrained(embedding_weights).float()
         self.embeddings.weight.requires_grad = True

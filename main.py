@@ -2,12 +2,12 @@ from argparse import ArgumentParser
 import sys
 import random
 import torch
+import json
 
 import modeltraining.train_RWE as train_RWE
+from model.RWE_Model import RWE_Model
 
-
-if __name__ == '__main__':
-
+def trainmodel_getembedding():
     parser = ArgumentParser()
     parser.add_argument('-word_embeddings', '--input_word_embeddings', help='Input word embeddings path', required=True)
     parser.add_argument('-rel_embeddings', '--input_relation_embeddings', help='Input relation embeddings path', required=True)
@@ -20,6 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('-devsize', '--devsize', help='Size of development data (proportion with respect to the full training set, from 0 to 1)', required=False, default=0.015)
     parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
     parser.add_argument('-model', '--output_model', help='True for output model, False for output pretrained word embeddings', required=True, default=True)
+    parser.add_argument('-hp', '--hyperparameters', help='Output path to store the output hyperparameters', required=True)
 
     args = vars(parser.parse_args())
     word_embeddings_path=args['input_word_embeddings']
@@ -33,6 +34,7 @@ if __name__ == '__main__':
     devsize=float(args['devsize'])
     lr=float(args['learning_rate'])
     model = bool(args['output_model'])
+    hp_path=args['hyperparameters']
     if devsize>=1 or devsize<0: sys.exit("Development data should be between 0% (0.0) and 100% (1.0) of the training data")
 
     print ("Loading word vocabulary...")
@@ -68,6 +70,16 @@ if __name__ == '__main__':
     matrix_output_train.clear()
     tensor_output_dev=torch.FloatTensor(matrix_output_dev)
     matrix_output_dev.clear()
+    hyperparams = dict()
+    hyperparams['hidden_size'] = hidden_size
+    hyperparams['dropout'] = dropout
+    hyperparams['dims_word'] = dims_word
+    hyperparams['dims_rels'] = dims_rels
+    hyperparams['embedding_weights'] = embedding_weights
+    hyperparams_json = json.dumps(hyperparams)
+    with open(hp_path, 'w') as f:
+        json.dump(hyperparams_json, f)
+    print("Hyperparameters saved to " + hp_path)
     model, criterion = train_RWE.getRWEModel(dims_word,dims_rels,embedding_weights,hidden_size,dropout)
     print ("RWE model loaded.")
     optimizer = torch.optim.Adam(model.parameters(), lr)
@@ -104,3 +116,34 @@ if __name__ == '__main__':
             txtfile.write("\n")
         txtfile.close()
         print ("\nFINISHED. Word embeddings stored at "+output_path)
+
+def loadmodel_calculateembedding():
+    parser = ArgumentParser()
+    parser.add_argument('-im', '--input_model', type=str, required=True, help='Path to the trained model')
+    parser.add_argument('-hidden', '--hidden_size', help='Size of the hidden layer (default=2xdimensions-wordembeddings)', required=False, default=0)
+    parser.add_argument('-dropout', '--drop_rate', help='Dropout rate', required=False, default=0.5)
+    parser.add_argument('-epochs', '--epochs_num', help='Number of epochs', required=False, default=5)
+    parser.add_argument('-interval', '--interval', help='Size of intervals during training', required=False, default=100)
+    parser.add_argument('-batchsize', '--batchsize', help='Batch size', default=10)
+    parser.add_argument('-devsize', '--devsize', help='Size of development data (proportion with respect to the full training set, from 0 to 1)', required=False, default=0.015)
+    parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
+    args = vars(parser.parse_args())
+
+    hidden_size=int(args['hidden_size'])
+    dropout=float(args['drop_rate'])
+    epochs=int(args['epochs_num'])
+    interval=int(args['interval'])
+    batchsize=int(args['batchsize'])
+    devsize=float(args['devsize'])
+    lr=float(args['learning_rate'])
+
+    model = RWE_Model()
+    model.load_state_dict(torch.load(args['input_model']))
+    print(model.state_dict())
+
+
+def main():
+    trainmodel_getembedding()
+
+if __name__ == '__main__':
+    trainmodel_getembedding()
