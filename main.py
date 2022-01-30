@@ -75,12 +75,13 @@ def trainmodel_getembedding():
     hyperparams['dropout'] = dropout
     # hyperparams['dims_word'] = dims_word
     # hyperparams['dims_rels'] = dims_rels
-    hyperparams['embedding_weights'] = embedding_weights
+    # hyperparams['embedding_weights'] = embedding_weights
     hyperparams_json = json.dumps(hyperparams)
     with open(hp_path + 'hyperparams.json', 'w') as f:
         json.dump(hyperparams_json, f)
     torch.save(dims_word, hp_path + 'dims_word.pt')
     torch.save(dims_rels, hp_path + 'dims_rels.pt')
+    torch.save(embedding_weights, hp_path + 'embedding_weights.pt')
     print("Hyperparameters saved to " + hp_path)
     model, criterion = train_RWE.getRWEModel(dims_word,dims_rels,embedding_weights,hidden_size,dropout)
     print ("RWE model loaded.")
