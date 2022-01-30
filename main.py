@@ -20,7 +20,7 @@ def trainmodel_getembedding():
     parser.add_argument('-devsize', '--devsize', help='Size of development data (proportion with respect to the full training set, from 0 to 1)', required=False, default=0.015)
     parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
     parser.add_argument('-model', '--output_model', help='True for output model, False for output pretrained word embeddings', required=True, default=True)
-    parser.add_argument('-hp', '--hyperparameters', help='Output path to store the output hyperparameters', required=True)
+    parser.add_argument('-hp', '--hyperparameters', help='Output path to store the output hyperparameters, until folder', required=True)
 
     args = vars(parser.parse_args())
     word_embeddings_path=args['input_word_embeddings']
@@ -73,12 +73,14 @@ def trainmodel_getembedding():
     hyperparams = dict()
     hyperparams['hidden_size'] = hidden_size
     hyperparams['dropout'] = dropout
-    hyperparams['dims_word'] = dims_word
-    hyperparams['dims_rels'] = dims_rels
+    # hyperparams['dims_word'] = dims_word
+    # hyperparams['dims_rels'] = dims_rels
     hyperparams['embedding_weights'] = embedding_weights
     hyperparams_json = json.dumps(hyperparams)
-    with open(hp_path, 'w') as f:
+    with open(hp_path + 'hyperparams.json', 'w') as f:
         json.dump(hyperparams_json, f)
+    torch.save(dims_word, hp_path + 'dims_word.pt')
+    torch.save(dims_rels, hp_path + 'dims_rels.pt')
     print("Hyperparameters saved to " + hp_path)
     model, criterion = train_RWE.getRWEModel(dims_word,dims_rels,embedding_weights,hidden_size,dropout)
     print ("RWE model loaded.")
