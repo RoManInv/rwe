@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import random
+import sys
 
 #Load embedding vocabulary
 def load_vocab_embeddings(input_path):
     first_line=True
     vocab=set()
-    input_file_relations=open(input_file_relations, 'r', encoding='utf-8')
+    input_file_relations=open(input_path, 'r', encoding='utf-8')
     for line in input_file_relations:
         if first_line==True:
             first_line=False

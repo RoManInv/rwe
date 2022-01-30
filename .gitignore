@@ -4,3 +4,7 @@ data/**.*
 **/*.model
 __pycache__/**.*
 **/*.pyc
+**/*.yml
+**/requirements.txt
+traindata/**.*
+pretrainedmodel/**.*
