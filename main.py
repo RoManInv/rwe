@@ -142,8 +142,9 @@ def loadmodel_calculateembedding():
     devsize=float(args['devsize'])
     lr=float(args['learning_rate'])
 
-    model = RWE_Model()
-    model.load_state_dict(torch.load(args['input_model']))
+    # model = RWE_Model()
+    # model.load_state_dict(torch.load(args['input_model']))
+    model=torch.load(args['input_model'])
     print(model.state_dict())
 
 
@@ -151,4 +152,4 @@ def main():
     trainmodel_getembedding()
 
 if __name__ == '__main__':
-    trainmodel_getembedding()
+    loadmodel_calculateembedding()
