@@ -2,6 +2,7 @@
 import numpy as np
 import random
 import sys
+from typing import Union
 
 #Load embedding vocabulary
 def load_vocab_embeddings(input_path):
@@ -101,3 +102,28 @@ def split_training_data(matrix_input,matrix_output,devsize,batchsize):
             matrix_input_train.append(matrix_input[i])
             matrix_output_train.append(matrix_output[i])
     return matrix_input_train,matrix_output_train,matrix_input_dev,matrix_output_dev
+
+
+def benchmark_preprocessing(token: str) -> str:
+    if(len(token) >= 2):
+        token = "_".join(token.split(" "))
+    return token
+
+def load_worddict_from_file(input_path: str) -> dict:
+    pass
+
+def get_token_fasttext_embedding(token: str, worddict: Union[str, dict]) -> np.ndarray(300,):
+    if(isinstance(worddict, str)):
+        worddict = load_worddict_from_file(worddict)
+    elif(not isinstance(worddict, dict)):
+        raise TypeError("worddict must be either a str or a dict")
+    
+    if(token in worddict.keys()):
+        return worddict[token]
+    else:
+        return np.zeros(300)
+
+def get_pair_embedding(ex: np.ndarray(300,), ey: np.ndarray(300,)) -> np.ndarray(600,):
+    element_wise_sum = ex + ey
+    element_wise_mult = ex * ey
+    # concat two embeddings
