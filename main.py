@@ -99,7 +99,9 @@ def trainmodel_getembedding():
 
     if(output_model):
         print ("\nSaving model...")
-        torch.save(model.state_dict(), output_path)
+        torch.save(model.state_dict(), hp_path + 'model_state.pt')
+        torch.save(model, hp_path + 'pretrained_model.pt')
+        print ("Model saved to " + hp_path)
         print ("\nModel saved succesfully.")
     else:
         parameters=list(output_model.parameters())
