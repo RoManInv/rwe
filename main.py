@@ -154,4 +154,4 @@ def main():
     trainmodel_getembedding()
 
 if __name__ == '__main__':
-    loadmodel_calculateembedding()
+    trainmodel_getembedding()
