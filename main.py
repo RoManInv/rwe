@@ -94,7 +94,7 @@ def trainmodel_getembedding():
     trainYBatches = train_RWE.getBatches(tensor_output_train.cuda(), batchsize)
     validYBatches = train_RWE.getBatches(tensor_output_dev.cuda(), batchsize)
     print ("Now starting training...\n")
-    with open(output_path + 'training_log.txt', 'w') as f:
+    with open(output_path + 'training_log.txt', 'w+') as f:
         for x1, x2, y, i in zip(trainX1batches, trainX2batches, trainYBatches, range(5)):
             np.savetxt(f, x1.cpu().numpy())
             f.write("\n")
@@ -102,11 +102,11 @@ def trainmodel_getembedding():
             f.write("\n")
             np.savetxt(f, y.cpu().numpy())
             f.write("\n")
-            f.write(len(x1))
+            f.write(str(len(x1)))
             f.write("\n")
-            f.write(len(x2))
+            f.write(str(len(x2)))
             f.write("\n")
-            f.write(len(y))
+            f.write(str(len(y)))
             f.write("\n")
             f.write("=============================")
             f.write("\n")
