@@ -3,6 +3,7 @@ import sys
 import random
 import torch
 import json
+import numpy as np
 
 import modeltraining.train_RWE as train_RWE
 from model.RWE_Model import RWE_Model
@@ -95,11 +96,11 @@ def trainmodel_getembedding():
     print ("Now starting training...\n")
     with open(output_path + 'training_log.txt', 'w') as f:
         for x1, x2, y, i in zip(trainX1batches, trainX2batches, trainYBatches, range(5)):
-            f.write(x1)
+            np.savetxt(f, x1.cpu().numpy())
             f.write("\n")
-            f.write(x2)
+            np.savetxt(f, x2.cpu().numpy())
             f.write("\n")
-            f.write(y)
+            np.savetxt(f, y.cpu().numpy())
             f.write("\n")
             f.write(len(x1))
             f.write("\n")
