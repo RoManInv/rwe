@@ -126,4 +126,4 @@ def get_token_fasttext_embedding(token: str, worddict: Union[str, dict]) -> np.n
 def get_pair_embedding(ex: np.ndarray(300,), ey: np.ndarray(300,)) -> np.ndarray(600,):
     element_wise_sum = ex + ey
     element_wise_mult = ex * ey
-    # concat two embeddings
+    return np.concatenate((element_wise_sum, element_wise_mult))
