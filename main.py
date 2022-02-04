@@ -93,8 +93,15 @@ def trainmodel_getembedding():
     trainYBatches = train_RWE.getBatches(tensor_output_train.cuda(), batchsize)
     validYBatches = train_RWE.getBatches(tensor_output_dev.cuda(), batchsize)
     print ("Now starting training...\n")
-    for x1, x2, y, i in zip(trainX1batches, trainX2batches, trainYBatches, range(5)):
-        print(x1, x2, y)
+    with open(output_path + 'training_log.txt', 'w') as f:
+        for x1, x2, y, i in zip(trainX1batches, trainX2batches, trainYBatches, range(5)):
+            print(x1)
+            print(x2)
+            print(y)
+            print(len(x1))
+            print(len(x2))
+            print(len(y))
+            print("=============================")
     output_model=train_RWE.trainEpochs(model, optimizer, criterion, (trainX1batches, trainX2batches, trainYBatches), (validX1Batches, validX2Batches, validYBatches), epochs, interval, lr)
     print ("\nTraining finished. Now loading relational word embeddings from trained model...")
 
