@@ -42,15 +42,6 @@ def trainmodel_getembedding():
     pre_word_vocab=train_RWE.load_word_vocab_from_relation_vectors(rel_embeddings_path)
     print ("Word vocabulary loaded succesfully ("+str(len(pre_word_vocab))+" words). Now loading word embeddings...")
     matrix_word_embeddings,word2index,index2word,dims_word=train_RWE.load_embeddings_filtered_byvocab(word_embeddings_path,pre_word_vocab)
-    with open(output_path + 'word2index.txt', 'w') as f:
-        f.write(str(len(word2index))+'\n')
-        # f.write(str(list(word2index.items())[0][1])+'\n')
-        i = 0
-        for key, val in word2index.items():
-            f.write(str(key) + '\t' + str(val) + '\n')
-            i += 1
-            if(i >= 5):
-                break
     pre_word_vocab.clear()
     print ("Word embeddings loaded succesfully ("+str(dims_word)+" dimensions). Now loading relation vectors...")
     matrix_input,matrix_output,dims_rels=train_RWE.load_training_data(rel_embeddings_path,matrix_word_embeddings,word2index)
@@ -61,6 +52,13 @@ def trainmodel_getembedding():
     random.setstate(s1)
     random.shuffle(matrix_output)
     matrix_input_train,matrix_output_train,matrix_input_dev,matrix_output_dev=train_RWE.split_training_data(matrix_input,matrix_output,devsize,batchsize)
+    for item in matrix_input_train:
+        with open(output_path + 'inputmatrix.txt', 'w') as f:
+            f.write(str(item))
+    for item in matrix_output_train:
+        with open(output_path + 'outputmatrix.txt', 'w') as f:
+            f.write(str(item))
+        
     matrix_input.clear()
     matrix_output.clear()
     print ("Done preprocessing all the data, now loading and training the model...\n")
@@ -177,14 +175,14 @@ def loadmodel_calculateembedding():
     print(model.state_dict())
 
 def checkTensor():
-    __PATH__ = './pretrainedmodel'
+    __PATH__ = './pretrainedmodel/'
     __FILE_PREF__ = 'RWE.model'
     __FILE_SUFF__ = 'Tensor.pt'
-    filelist = ['x1', 'x2', 'y']
+    filelist = ['dims_rels.pt', 'dims_word.pt']
 
     for file in filelist:
-        tensor = torch.load(__PATH__ + '/' + __FILE_PREF__ + file  + __FILE_SUFF__)
-        print(file + ' tensor size: ' + str(tensor.size()))
+        tensor = torch.load(__PATH__ + file)
+        print(file + ' tensor size: ' + str(tensor))
 
 def main():
     trainmodel_getembedding()
