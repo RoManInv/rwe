@@ -43,8 +43,8 @@ def trainmodel_getembedding():
     print ("Word vocabulary loaded succesfully ("+str(len(pre_word_vocab))+" words). Now loading word embeddings...")
     matrix_word_embeddings,word2index,index2word,dims_word=train_RWE.load_embeddings_filtered_byvocab(word_embeddings_path,pre_word_vocab)
     with open(output_path + 'word2index.txt', 'w') as f:
-        f.write(len(word2index)+'\n')
-        f.write(len(word2index.items[0][1]))
+        f.write(str(len(word2index))+'\n')
+        f.write(str(len(word2index.items[0][1]))+'\n')
         i = 0
         for key, val in word2index.items():
             f.write(str(key) + '\t' + str(val) + '\n')
