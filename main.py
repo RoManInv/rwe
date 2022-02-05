@@ -42,6 +42,15 @@ def trainmodel_getembedding():
     pre_word_vocab=train_RWE.load_word_vocab_from_relation_vectors(rel_embeddings_path)
     print ("Word vocabulary loaded succesfully ("+str(len(pre_word_vocab))+" words). Now loading word embeddings...")
     matrix_word_embeddings,word2index,index2word,dims_word=train_RWE.load_embeddings_filtered_byvocab(word_embeddings_path,pre_word_vocab)
+    with open(output_path + 'word2index.txt', 'w') as f:
+        f.write(len(word2index)+'\n')
+        f.write(len(word2index.items[0][1]))
+        i = 0
+        for key, val in word2index.items():
+            f.write(str(key) + '\t' + str(val) + '\n')
+            i += 1
+            if(i >= 5):
+                break
     pre_word_vocab.clear()
     print ("Word embeddings loaded succesfully ("+str(dims_word)+" dimensions). Now loading relation vectors...")
     matrix_input,matrix_output,dims_rels=train_RWE.load_training_data(rel_embeddings_path,matrix_word_embeddings,word2index)
@@ -167,6 +176,15 @@ def loadmodel_calculateembedding():
     model=torch.load(args['input_model'])
     print(model.state_dict())
 
+def checkTensor():
+    __PATH__ = './pretrainedmodel'
+    __FILE_PREF__ = 'RWE.model'
+    __FILE_SUFF__ = 'Tensor.pt'
+    filelist = ['x1', 'x2', 'y']
+
+    for file in filelist:
+        tensor = torch.load(__PATH__ + '/' + __FILE_PREF__ + file  + __FILE_SUFF__)
+        print(file + ' tensor size: ' + str(tensor.size()))
 
 def main():
     trainmodel_getembedding()
