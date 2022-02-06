@@ -123,6 +123,7 @@ def get_token_fasttext_embedding(token: str, worddict: Union[str, dict]) -> np.n
     else:
         return np.zeros(300)
 
+# No need for this
 def get_pair_embedding(ex: np.ndarray(300,), ey: np.ndarray(300,)) -> np.ndarray(600,):
     element_wise_sum = ex + ey
     element_wise_mult = ex * ey

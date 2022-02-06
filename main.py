@@ -1,12 +1,20 @@
 from argparse import ArgumentParser
 import sys
 import random
+from modeltraining.preprocessing import load_embeddings_filtered_byvocab
 import torch
 import json
 import numpy as np
+import pandas as pd
+import os
 
 import modeltraining.train_RWE as train_RWE
 from model.RWE_Model import RWE_Model
+from modeltraining.Tokenizer import Tokenizer
+
+__BENCHMARK__ = './benchmark/'
+__EXAMPLENUM__ = 5
+__QNUM__ = 20
 
 def trainmodel_getembedding():
     parser = ArgumentParser()
@@ -102,7 +110,7 @@ def trainmodel_getembedding():
     validYBatches = train_RWE.getBatches(tensor_output_dev.cuda(), batchsize)
     print ("Now starting training...\n")
     #with open(output_path + 'training_log.txt', 'w+') as f:
-    for x1, x2, y, i in zip(trainX1batches, trainX2batches, trainYBatches, range(1)):
+    # for x1, x2, y, i in zip(trainX1batches, trainX2batches, trainYBatches, range(1)):
             #np.savetxt(f, x1.cpu().numpy())
             #f.write("\n")
             #np.savetxt(f, x2.cpu().numpy())
@@ -117,9 +125,9 @@ def trainmodel_getembedding():
             #f.write("\n")
             #f.write("=============================")
             #f.write("\n")
-        torch.save(x1, output_path + 'x1Tensor.pt')
-        torch.save(x2, output_path + 'x2Tensor.pt')
-        torch.save(y, output_path + 'yTensor.pt')
+        # torch.save(x1, output_path + 'x1Tensor.pt')
+        # torch.save(x2, output_path + 'x2Tensor.pt')
+        # torch.save(y, output_path + 'yTensor.pt')
     output_model=train_RWE.trainEpochs(model, optimizer, criterion, (trainX1batches, trainX2batches, trainYBatches), (validX1Batches, validX2Batches, validYBatches), epochs, interval, lr)
     print ("\nTraining finished. Now loading relational word embeddings from trained model...")
 
@@ -171,8 +179,65 @@ def loadmodel_calculateembedding():
 
     # model = RWE_Model()
     # model.load_state_dict(torch.load(args['input_model']))
-    model=torch.load(args['input_model'])
-    print(model.state_dict())
+    dims_word = torch.load('pretrainedmodel/dims_word.pt')
+    dims_rels = torch.load('pretrainedmodel/dims_rels.pt')
+    embedding_weights = torch.load('pretrainedmodel/embedding_weights.pt')
+    # model, criterion = train_RWE.getRWEModel(dims_word,dims_rels,embedding_weights,hidden_size,dropout)
+    # model.load_state_dict(torch.load(args['input_model']))
+    model = torch.load(args['input_model'])
+    model.eval()
+    # print(model.state_dict())
+
+    testfile = 'CountryToLanguage.csv'
+    dataTable = pd.read_csv(os.path.join(__BENCHMARK__, testfile))
+    example = dataTable.iloc[:__EXAMPLENUM__, :]
+    XList = example.iloc[:, :-1].values.tolist()
+    XList = [item for sublist in XList for item in sublist]
+    Y = example.iloc[:, -1].values.tolist()
+    Q = dataTable.iloc[__EXAMPLENUM__:__QNUM__, :-1].values.tolist()
+    QY = dataTable.iloc[__EXAMPLENUM__:__QNUM__, -1].values.tolist()
+    Q = [item for sublist in Q for item in sublist]
+
+    tokenizer = Tokenizer()
+
+    XList = [tokenizer.tokenize(sent) for sent in XList]
+    Y = [tokenizer.tokenize(sent) for sent in Y]
+    Q = [tokenizer.tokenize(sent) for sent in Q]
+
+    # print(XList)
+    # print(Y)
+    # print(Q)
+
+    vocab = set()
+    for x in XList:
+        vocab.add(x)
+    for y in Y:
+        vocab.add(y)
+    inputpath = 'traindata/RWE_default.txt'
+    matrix_word_embeddings,word2index,index2word,dimensions = load_embeddings_filtered_byvocab(inputpath, vocab)
+    # print(word2index)
+    # print(len(matrix_word_embeddings))
+
+    tensor1 = torch.Tensor(matrix_word_embeddings[word2index[XList[0]]]).cuda().view(-1, 300)
+    tensor2 = torch.Tensor(matrix_word_embeddings[word2index[Y[0]]]).cuda().view(-1, 300)
+    # tensor1 = torch.Tensor(word2index[XList[0]]).cuda()
+    # tensor2 = torch.Tensor(word2index[Y[0]]).cuda()
+    tensor1 = torch.autograd.Variable(tensor1, requires_grad = False).to(torch.int64)
+    tensor2 = torch.autograd.Variable(tensor2, requires_grad = False).to(torch.int64)
+    rel1 = model(tensor1, tensor2)
+
+    tensor1 = torch.Tensor(matrix_word_embeddings[word2index[XList[-1]]]).cuda().view(-1, 300)
+    tensor2 = torch.Tensor(matrix_word_embeddings[word2index[Y[-1]]]).cuda().view(-1, 300)
+    # tensor1 = torch.Tensor(word2index[XList[0]]).cuda()
+    # tensor2 = torch.Tensor(word2index[Y[0]]).cuda()
+    tensor1 = torch.autograd.Variable(tensor1, requires_grad = False).to(torch.int64)
+    tensor2 = torch.autograd.Variable(tensor2, requires_grad = False).to(torch.int64)
+    rel2 = model(tensor1, tensor2)
+
+    cos = torch.nn.functional.cosine_similarity(rel1, rel2)
+    print(cos)
+    # print(rel1)
+    
 
 def checkTensor():
     __PATH__ = './pretrainedmodel/'
@@ -188,4 +253,4 @@ def main():
     trainmodel_getembedding()
 
 if __name__ == '__main__':
-    trainmodel_getembedding()
+    loadmodel_calculateembedding()
