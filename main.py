@@ -60,12 +60,15 @@ def trainmodel_getembedding():
     random.setstate(s1)
     random.shuffle(matrix_output)
     matrix_input_train,matrix_output_train,matrix_input_dev,matrix_output_dev=train_RWE.split_training_data(matrix_input,matrix_output,devsize,batchsize)
-    for item in matrix_input_train:
-        with open(output_path + 'inputmatrix.txt', 'w') as f:
+    with open(output_path + 'inputtrainmatrix.txt', 'w') as f:
+        for item in matrix_input_train:
             f.write(str(item))
-    for item in matrix_output_train:
-        with open(output_path + 'outputmatrix.txt', 'w') as f:
+    with open(output_path + 'inputmatrix.txt', 'w') as f:
+        for item in matrix_input:
             f.write(str(item))
+    # for item in matrix_output_train:
+    #     with open(output_path + 'outputmatrix.txt', 'w') as f:
+    #         f.write(str(item))
         
     matrix_input.clear()
     matrix_output.clear()
@@ -213,29 +216,52 @@ def loadmodel_calculateembedding():
         vocab.add(x)
     for y in Y:
         vocab.add(y)
+    print(XList)
+    print(Y)
+    print(vocab)
     inputpath = 'traindata/RWE_default.txt'
     matrix_word_embeddings,word2index,index2word,dimensions = load_embeddings_filtered_byvocab(inputpath, vocab)
+    print(matrix_word_embeddings[3])
+    # print(word2index)
+    # print(word2index.keys()[:10])
+    # i = 0
+    # for key in word2index.keys():
+    #     print(key, word2index[key])
+        # i += 1
+        # if i == 10:
+        #     break
     # print(word2index)
     # print(len(matrix_word_embeddings))
 
-    tensor1 = torch.Tensor(matrix_word_embeddings[word2index[XList[0]]]).cuda().view(-1, 300)
-    tensor2 = torch.Tensor(matrix_word_embeddings[word2index[Y[0]]]).cuda().view(-1, 300)
+    # tensor1 = torch.Tensor(matrix_word_embeddings[word2index[XList[0]]]).cuda().view(-1, 300)
+    # tensor2 = torch.Tensor(matrix_word_embeddings[word2index[Y[0]]]).cuda().view(-1, 300)
+    tensor1 = torch.LongTensor(matrix_word_embeddings[word2index['portugal']]).cuda().view(-1, 300)
+    tensor2 = torch.LongTensor(matrix_word_embeddings[word2index['portuguese']]).cuda().view(-1, 300)
     # tensor1 = torch.Tensor(word2index[XList[0]]).cuda()
     # tensor2 = torch.Tensor(word2index[Y[0]]).cuda()
-    tensor1 = torch.autograd.Variable(tensor1, requires_grad = False).to(torch.int64)
-    tensor2 = torch.autograd.Variable(tensor2, requires_grad = False).to(torch.int64)
+    # tensor1 = torch.autograd.Variable(tensor1, requires_grad = False).to(torch.cuda.DoubleTensor)
+    # tensor2 = torch.autograd.Variable(tensor2, requires_grad = False).to(torch.cuda.DoubleTensor)
     rel1 = model(tensor1, tensor2)
 
-    tensor1 = torch.Tensor(matrix_word_embeddings[word2index[XList[-1]]]).cuda().view(-1, 300)
-    tensor2 = torch.Tensor(matrix_word_embeddings[word2index[Y[-1]]]).cuda().view(-1, 300)
+    # tensor3 = torch.Tensor(matrix_word_embeddings[word2index[XList[1]]]).cuda().view(-1, 300)
+    # tensor4 = torch.Tensor(matrix_word_embeddings[word2index[Y[1]]]).cuda().view(-1, 300)
+    tensor3 = torch.LongTensor(matrix_word_embeddings[word2index['indonesia']]).cuda().view(-1, 300)
+    tensor4 = torch.LongTensor(matrix_word_embeddings[word2index['indonesian']]).cuda().view(-1, 300)
     # tensor1 = torch.Tensor(word2index[XList[0]]).cuda()
     # tensor2 = torch.Tensor(word2index[Y[0]]).cuda()
-    tensor1 = torch.autograd.Variable(tensor1, requires_grad = False).to(torch.int64)
-    tensor2 = torch.autograd.Variable(tensor2, requires_grad = False).to(torch.int64)
-    rel2 = model(tensor1, tensor2)
+    # tensor3 = torch.autograd.Variable(tensor3, requires_grad = False).to(torch.cuda.DoubleTensor)
+    # tensor4 = torch.autograd.Variable(tensor4, requires_grad = False).to(torch.cuda.DoubleTensor)
+    rel2 = model(tensor3, tensor4)
 
-    cos = torch.nn.functional.cosine_similarity(rel1, rel2)
-    print(cos)
+    # print(rel1.shape)
+    # print(rel2.shape)
+    print(tensor1)
+    print(tensor2)
+    print(tensor3)
+    print(tensor4)
+
+    # cos = torch.nn.CosineSimilarity(dim = 0, eps = 1e-6)
+    # print(cos(rel1, rel2))
     # print(rel1)
     
 
@@ -253,4 +279,4 @@ def main():
     trainmodel_getembedding()
 
 if __name__ == '__main__':
-    loadmodel_calculateembedding()
+    trainmodel_getembedding()
