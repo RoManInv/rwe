@@ -221,7 +221,7 @@ def loadmodel_calculateembedding():
     print(vocab)
     inputpath = 'traindata/RWE_default.txt'
     matrix_word_embeddings,word2index,index2word,dimensions = load_embeddings_filtered_byvocab(inputpath, vocab)
-    print(matrix_word_embeddings[3])
+    # print(matrix_word_embeddings[3])
     # print(word2index)
     # print(word2index.keys()[:10])
     # i = 0
@@ -235,8 +235,8 @@ def loadmodel_calculateembedding():
 
     # tensor1 = torch.Tensor(matrix_word_embeddings[word2index[XList[0]]]).cuda().view(-1, 300)
     # tensor2 = torch.Tensor(matrix_word_embeddings[word2index[Y[0]]]).cuda().view(-1, 300)
-    tensor1 = torch.LongTensor(matrix_word_embeddings[word2index['portugal']]).cuda().view(-1, 300)
-    tensor2 = torch.LongTensor(matrix_word_embeddings[word2index['portuguese']]).cuda().view(-1, 300)
+    tensor1 = torch.LongTensor(matrix_word_embeddings[5]).cuda().view(-1, 300)
+    tensor2 = torch.LongTensor(matrix_word_embeddings[6]).cuda().view(-1, 300)
     # tensor1 = torch.Tensor(word2index[XList[0]]).cuda()
     # tensor2 = torch.Tensor(word2index[Y[0]]).cuda()
     # tensor1 = torch.autograd.Variable(tensor1, requires_grad = False).to(torch.cuda.DoubleTensor)
@@ -245,8 +245,8 @@ def loadmodel_calculateembedding():
 
     # tensor3 = torch.Tensor(matrix_word_embeddings[word2index[XList[1]]]).cuda().view(-1, 300)
     # tensor4 = torch.Tensor(matrix_word_embeddings[word2index[Y[1]]]).cuda().view(-1, 300)
-    tensor3 = torch.LongTensor(matrix_word_embeddings[word2index['indonesia']]).cuda().view(-1, 300)
-    tensor4 = torch.LongTensor(matrix_word_embeddings[word2index['indonesian']]).cuda().view(-1, 300)
+    tensor3 = torch.LongTensor(matrix_word_embeddings[1]).cuda().view(-1, 300)
+    tensor4 = torch.LongTensor(matrix_word_embeddings[10]).cuda().view(-1, 300)
     # tensor1 = torch.Tensor(word2index[XList[0]]).cuda()
     # tensor2 = torch.Tensor(word2index[Y[0]]).cuda()
     # tensor3 = torch.autograd.Variable(tensor3, requires_grad = False).to(torch.cuda.DoubleTensor)
@@ -279,4 +279,4 @@ def main():
     trainmodel_getembedding()
 
 if __name__ == '__main__':
-    trainmodel_getembedding()
+    loadmodel_calculateembedding()
