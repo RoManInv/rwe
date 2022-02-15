@@ -246,7 +246,7 @@ def loadmodel_calculateembedding():
     # tensor3 = torch.Tensor(matrix_word_embeddings[word2index[XList[1]]]).cuda().view(-1, 300)
     # tensor4 = torch.Tensor(matrix_word_embeddings[word2index[Y[1]]]).cuda().view(-1, 300)
     tensor3 = torch.LongTensor(matrix_word_embeddings[1]).cuda().view(-1, 300)
-    tensor4 = torch.LongTensor(matrix_word_embeddings[10]).cuda().view(-1, 300)
+    tensor4 = torch.LongTensor(matrix_word_embeddings[9]).cuda().view(-1, 300)
     # tensor1 = torch.Tensor(word2index[XList[0]]).cuda()
     # tensor2 = torch.Tensor(word2index[Y[0]]).cuda()
     # tensor3 = torch.autograd.Variable(tensor3, requires_grad = False).to(torch.cuda.DoubleTensor)
