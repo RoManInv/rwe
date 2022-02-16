@@ -58,6 +58,9 @@ def validate(model, batches, criterion):
         x1 = torch.autograd.Variable(x1, requires_grad=False)
         x2 = torch.autograd.Variable(x2, requires_grad=False)
         print_in_steps('pretrainedmodel/exactinput.txt', [x1, x2])
+        print_in_steps('pretrainedmodel/exactinput.txt', x1.size())
+        print_in_steps('pretrainedmodel/exactinput.txt', x2.size())
+        print_in_steps('pretrainedmodel/exactinput.txt', '==========')
         output = model(x1, x2)
         error = criterion(output, y)
         evalErr += error.item()
@@ -77,11 +80,11 @@ def getBatches(data, batchSize):
     embsize = int(data.size(-1))
     return data.view(-1, batchSize, embsize) 
 
-def print_in_steps(file, data,  mode = 'w+'):
+def print_in_steps(file, data,  mode = 'a'):
     with open(file, mode) as f:
         if(isinstance(data, list)):
             for i in range(len(data)):
                 f.write(str(data[i])+'\n')
-                f.write('=======')
+                f.write('------\n')
         else:
-            f.write(str(data))
+            f.write(str(data) + '\n')

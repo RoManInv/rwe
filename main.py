@@ -236,24 +236,24 @@ def loadmodel_calculateembedding():
 
     # tensor1 = torch.Tensor(matrix_word_embeddings[word2index[XList[0]]]).cuda().view(-1, 300)
     # tensor2 = torch.Tensor(matrix_word_embeddings[word2index[Y[0]]]).cuda().view(-1, 300)
-    tensor1 = torch.LongTensor(matrix_word_embeddings[5]).cuda().view(-1, 300)
-    tensor2 = torch.LongTensor(matrix_word_embeddings[6]).cuda().view(-1, 300)
+    # tensor1 = torch.LongTensor(matrix_word_embeddings[5]).cuda().view(-1, 300)
+    # tensor2 = torch.LongTensor(matrix_word_embeddings[6]).cuda().view(-1, 300)
     # tensor1 = torch.LongTensor(word2index[XList[0]]).cuda()
     # tensor2 = torch.LongTensor(word2index[Y[0]]).cuda()
     # tensor1 = torch.autograd.Variable(tensor1, requires_grad = False).to(torch.cuda.DoubleTensor)
     # tensor2 = torch.autograd.Variable(tensor2, requires_grad = False).to(torch.cuda.DoubleTensor)
-    rel1 = model(tensor1, tensor2)
+    # rel1 = model(tensor1, tensor2)
     # rel1 = [tensor1, tensor2]
 
     # tensor3 = torch.Tensor(matrix_word_embeddings[word2index[XList[1]]]).cuda().view(-1, 300)
     # tensor4 = torch.Tensor(matrix_word_embeddings[word2index[Y[1]]]).cuda().view(-1, 300)
-    tensor3 = torch.LongTensor(matrix_word_embeddings[1]).cuda().view(-1, 300)
-    tensor4 = torch.LongTensor(matrix_word_embeddings[9]).cuda().view(-1, 300)
+    # tensor3 = torch.LongTensor(matrix_word_embeddings[1]).cuda().view(-1, 300)
+    # tensor4 = torch.LongTensor(matrix_word_embeddings[9]).cuda().view(-1, 300)
     # tensor3 = torch.LongTensor(word2index[XList[0]]).cuda()
     # tensor4 = torch.LongTensor(word2index[Y[0]]).cuda()
     # tensor3 = torch.autograd.Variable(tensor3, requires_grad = False).to(torch.cuda.DoubleTensor)
     # tensor4 = torch.autograd.Variable(tensor4, requires_grad = False).to(torch.cuda.DoubleTensor)
-    rel2 = model(tensor3, tensor4)
+    # rel2 = model(tensor3, tensor4)
     # rel2 = [tensor3, tensor4]
 
     # print(rel1.shape)
@@ -262,7 +262,11 @@ def loadmodel_calculateembedding():
     # print(tensor2)
     # print(tensor3)
     # print(tensor4)
-    print(model(rel1, rel2))
+    # print(model(rel1, rel2))
+    print(len(matrix_word_embeddings[5]))
+    print(len(matrix_word_embeddings[6]))
+    print(len(matrix_word_embeddings[1]))
+    print(len(matrix_word_embeddings[9]))
 
     # cos = torch.nn.CosineSimilarity(dim = 0, eps = 1e-6)
     # print(cos(rel1, rel2))
