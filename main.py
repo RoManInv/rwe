@@ -7,6 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 import os
+import pickle
 
 import modeltraining.train_RWE as train_RWE
 from model.RWE_Model import RWE_Model
@@ -50,6 +51,18 @@ def trainmodel_getembedding():
     pre_word_vocab=train_RWE.load_word_vocab_from_relation_vectors(rel_embeddings_path)
     print ("Word vocabulary loaded succesfully ("+str(len(pre_word_vocab))+" words). Now loading word embeddings...")
     matrix_word_embeddings,word2index,index2word,dims_word=train_RWE.load_embeddings_filtered_byvocab(word_embeddings_path,pre_word_vocab)
+    if(type(matrix_word_embeddings).__module__=='numpy'):
+        np.save(output_path + 'matrix_word_embeddings.npy', matrix_word_embeddings)
+    else:
+        pickle.dump(matrix_word_embeddings, open(output_path + 'matrix_word_embeddings.pkl', 'wb'))
+    if(type(word2index).__module__=='numpy'):
+        np.save(output_path + 'word2index.npy', word2index)
+    else:
+        pickle.dump(word2index, open(output_path + 'word2index.pkl', 'wb'))
+    if(type(index2word).__module__=='numpy'):
+        np.save(output_path + 'index2word.npy', index2word)
+    else:
+        pickle.dump(index2word, open(output_path + 'index2word.pkl', 'wb'))
     pre_word_vocab.clear()
     print ("Word embeddings loaded succesfully ("+str(dims_word)+" dimensions). Now loading relation vectors...")
     matrix_input,matrix_output,dims_rels=train_RWE.load_training_data(rel_embeddings_path,matrix_word_embeddings,word2index)
@@ -221,7 +234,7 @@ def loadmodel_calculateembedding():
     print(Y)
     print(vocab)
     inputpath = 'traindata/RWE_default.txt'
-    matrix_word_embeddings,word2index,index2word,dimensions = load_embeddings_filtered_byvocab(inputpath, vocab)
+    # matrix_word_embeddings,word2index,index2word,dimensions = load_embeddings_filtered_byvocab(inputpath, vocab)
     # print(matrix_word_embeddings[9])
     # print(word2index)
     # print(word2index.keys()[:10])
@@ -263,10 +276,10 @@ def loadmodel_calculateembedding():
     # print(tensor3)
     # print(tensor4)
     # print(model(rel1, rel2))
-    print(len(matrix_word_embeddings[5]))
-    print(len(matrix_word_embeddings[6]))
-    print(len(matrix_word_embeddings[1]))
-    print(len(matrix_word_embeddings[9]))
+    # print(len(matrix_word_embeddings[5]))
+    # print(len(matrix_word_embeddings[6]))
+    # print(len(matrix_word_embeddings[1]))
+    # print(len(matrix_word_embeddings[9]))
 
     # cos = torch.nn.CosineSimilarity(dim = 0, eps = 1e-6)
     # print(cos(rel1, rel2))
