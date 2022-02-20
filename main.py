@@ -181,8 +181,10 @@ def trainmodel_getembedding():
     cos = torch.nn.CosineSimilarity(dim=0, eps=1e-6)
     emb1 = model(torch.LongTensor([[word2index[testword1]]]).cuda(), torch.LongTensor([[word2index[testword2]]]).cuda())
     emb2 = model(torch.LongTensor([[word2index[testword3]]]).cuda(), torch.LongTensor([[word2index[testword4]]]).cuda())
-    print(emb1)
-    print(emb2)
+    print(word2index[testword1])
+    print(word2index[testword2])
+    print(word2index[testword3])
+    print(word2index[testword4])
     print(cos(emb1, emb2))
 
 def loadmodel_calculateembedding():
