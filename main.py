@@ -173,14 +173,15 @@ def trainmodel_getembedding():
         txtfile.close()
         print ("\nFINISHED. Word embeddings stored at "+output_path)
 
-        testword1 = 'germany'
-        testword2 = 'german'
-        testword3 = 'france'
-        testword4 = 'french'
-        cos = torch.nn.CosineSimilarity(dim=0, eps=1e-6)
-        emb1 = model(torch.LongTensor([[word2index[testword1]]]).cuda(), torch.LongTensor([[word2index[testword2]]]).cuda())
-        emb2 = model(torch.LongTensor([[word2index[testword3]]]).cuda(), torch.LongTensor([[word2index[testword4]]]).cuda())
-        print(cos(emb1, emb2))
+    print('Testing with small DS')
+    testword1 = 'germany'
+    testword2 = 'german'
+    testword3 = 'france'
+    testword4 = 'french'
+    cos = torch.nn.CosineSimilarity(dim=0, eps=1e-6)
+    emb1 = model(torch.LongTensor([[word2index[testword1]]]).cuda(), torch.LongTensor([[word2index[testword2]]]).cuda())
+    emb2 = model(torch.LongTensor([[word2index[testword3]]]).cuda(), torch.LongTensor([[word2index[testword4]]]).cuda())
+    print(cos(emb1, emb2))
 
 def loadmodel_calculateembedding():
     os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
