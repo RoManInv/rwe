@@ -181,6 +181,10 @@ def trainmodel_getembedding():
     cos = torch.nn.CosineSimilarity(dim=0, eps=1e-6)
     emb1 = model(torch.LongTensor([[word2index[testword1]]]).cuda(), torch.LongTensor([[word2index[testword2]]]).cuda())
     emb2 = model(torch.LongTensor([[word2index[testword3]]]).cuda(), torch.LongTensor([[word2index[testword4]]]).cuda())
+    with open('pretrainedmodel/embs.txt', 'w') as f:
+        f.write(str(emb1))
+        f.write("\n")
+        f.write(str(emb2))
     print(word2index[testword1])
     print(word2index[testword2])
     print(word2index[testword3])
