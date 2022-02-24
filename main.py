@@ -29,6 +29,7 @@ def trainmodel_getembedding():
     parser.add_argument('-batchsize', '--batchsize', help='Batch size', default=10)
     parser.add_argument('-devsize', '--devsize', help='Size of development data (proportion with respect to the full training set, from 0 to 1)', required=False, default=0.015)
     parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
+    # parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
     parser.add_argument('-model', '--output_model', help='True for output model, False for output pretrained word embeddings', required=True, default=True)
     parser.add_argument('-hp', '--hyperparameters', help='Output path to store the output hyperparameters, until folder', required=True)
 
@@ -219,6 +220,7 @@ def loadmodel_calculateembedding():
     embedding_weights = torch.load('pretrainedmodel/embedding_weights.pt')
     # model, criterion = train_RWE.getRWEModel(dims_word,dims_rels,embedding_weights,hidden_size,dropout)
     # model.load_state_dict(torch.load(args['input_model']))
+    modelstate = torch.load('pretrainedmodel/model_state.pt')
     model = torch.load(args['input_model'])
     model.eval()
     matrix_word_embeddings = pickle.load(open('pretrainedmodel/RWE.modelmatrix_word_embeddings.pkl', 'rb'))
@@ -245,15 +247,15 @@ def loadmodel_calculateembedding():
     # print(Y)
     # print(Q)
 
-    vocab = set()
-    for x in XList:
-        vocab.add(x)
-    for y in Y:
-        vocab.add(y)
-    print(XList)
-    print(Y)
-    print(vocab)
-    inputpath = 'traindata/RWE_default.txt'
+    # vocab = set()
+    # for x in XList:
+    #     vocab.add(x)
+    # for y in Y:
+    #     vocab.add(y)
+    # print(XList)
+    # print(Y)
+    # print(vocab)
+    # inputpath = 'traindata/RWE_default.txt'
     # matrix_word_embeddings,word2index,index2word,dimensions = load_embeddings_filtered_byvocab(inputpath, vocab)
     # print(matrix_word_embeddings[9])
     # print(word2index)
@@ -266,44 +268,24 @@ def loadmodel_calculateembedding():
         #     break
     # print(word2index)
     # print(len(matrix_word_embeddings))
-
-    tensor1 = torch.Tensor(matrix_word_embeddings[word2index[XList[0]]]).cuda().view(-1, 300)
-    tensor2 = torch.Tensor(matrix_word_embeddings[word2index[Y[0]]]).cuda().view(-1, 300)
-    # tensor1 = torch.LongTensor(matrix_word_embeddings[5]).cuda().view(-1, 300)
-    # tensor2 = torch.LongTensor(matrix_word_embeddings[6]).cuda().view(-1, 300)
-    # tensor1 = model.word_embeddings(torch.LongTensor(word2index[XList[0]])).cuda()
-    # tensor2 = model.word_embeddings(torch.LongTensor(word2index[Y[0]])).cuda()
-    # tensor1 = torch.autograd.Variable(tensor1, requires_grad = False).to(torch.cuda.DoubleTensor)
-    # tensor2 = torch.autograd.Variable(tensor2, requires_grad = False).to(torch.cuda.DoubleTensor)
+    # print(word2index[XList[0]], word2index[Y[0]])
+    # print(word2index[XList[1]], word2index[Y[1]])
+    tensor1 = torch.LongTensor([[word2index['fresh']]]).cuda()
+    tensor2 = torch.LongTensor([[word2index['rotten']]]).cuda()
     rel1 = model(tensor1, tensor2)
-    rel1 = [tensor1, tensor2]
+    print(rel1)
 
-    tensor3 = torch.Tensor(matrix_word_embeddings[word2index[XList[1]]]).cuda().view(-1, 300)
-    tensor4 = torch.Tensor(matrix_word_embeddings[word2index[Y[1]]]).cuda().view(-1, 300)
-    # tensor3 = torch.LongTensor(matrix_word_embeddings[1]).cuda().view(-1, 300)
-    # tensor4 = torch.LongTensor(matrix_word_embeddings[9]).cuda().view(-1, 300)
-    # tensor3 = model.word_embeddings(torch.LongTensor(word2index[XList[1]])).cuda()
-    # tensor4 = model.word_embeddings(torch.LongTensor(word2index[Y[1]])).cuda()
-    # tensor3 = torch.autograd.Variable(tensor3, requires_grad = False).to(torch.cuda.DoubleTensor)
-    # tensor4 = torch.autograd.Variable(tensor4, requires_grad = False).to(torch.cuda.DoubleTensor)
+    tensor3 = torch.LongTensor([[word2index['fresh']]]).cuda()
+    tensor4 = torch.LongTensor([[word2index['healthy']]]).cuda()
     rel2 = model(tensor3, tensor4)
-    rel2 = [tensor3, tensor4]
+    print(rel2)
 
-    # print(rel1.shape)
-    # print(rel2.shape)
-    # print(tensor1)
-    # print(tensor2)
-    # print(tensor3)
-    # print(tensor4)
-    # print(model(rel1, rel2))
-    # print(len(matrix_word_embeddings[5]))
-    # print(len(matrix_word_embeddings[6]))
-    # print(len(matrix_word_embeddings[1]))
-    # print(len(matrix_word_embeddings[9]))
 
     cos = torch.nn.CosineSimilarity(dim = 0, eps = 1e-6)
     print(cos(rel1, rel2))
-    # print(rel1)
+    # for name, param in model.named_parameters():
+    #     print(name, param.data)
+    # print(modelstate)
     
 
 def checkTensor():
@@ -320,5 +302,5 @@ def main():
     trainmodel_getembedding()
 
 if __name__ == '__main__':
-    trainmodel_getembedding()
-    # loadmodel_calculateembedding()
+    # trainmodel_getembedding()
+    loadmodel_calculateembedding()
