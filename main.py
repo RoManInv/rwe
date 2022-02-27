@@ -286,9 +286,19 @@ def loadmodel_calculateembedding():
     rel2 = model(tensor3, tensor4)
     # print(rel2)
 
+    tensor5 = torch.LongTensor([[word2index['china']]]).cuda()
+    tensor6 = torch.LongTensor([[word2index['beijing']]]).cuda()
+    rel3 = model(tensor5, tensor6)
+
+    tensor7 = torch.LongTensor([[word2index['germany']]]).cuda()
+    tensor8 = torch.LongTensor([[word2index['german']]]).cuda()
+    rel4 = model(tensor7, tensor8)
+
 
     cos = torch.nn.CosineSimilarity(dim = 0, eps = 1e-6)
     print(cos(rel1, rel2))
+    print(cos(rel1, rel3))
+    print(cos(rel3, rel4))
 
     fresh_rotten = "-0.06377560123801232 -0.06785640195012092 0.18061776265967638 -0.12278739660978318 \
     -0.13613999634981155 0.34794980064034464 -0.11092540137469768 -0.1337531954050064 0.15914519876241684 \

@@ -7,5 +7,5 @@ __pycache__/**.*
 **/*.yml
 **/requirements.txt
 traindata/**.*
-pretrainedmodel/**.*
+pretrainedmodel/
 benchmark/**.*
