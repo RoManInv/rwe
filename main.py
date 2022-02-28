@@ -816,7 +816,7 @@ def main():
     trainmodel_getembedding()
 
 if __name__ == '__main__':
-    # trainmodel_getembedding()
-    testcorrectness()
+    trainmodel_getembedding()
+    # testcorrectness()
     # checkTensor()
     # loadmodel_calculateembedding()
