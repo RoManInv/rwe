@@ -14,7 +14,7 @@ class RWE_Model(torch.nn.Module):
         embed1 = self.embeddings(input1)
         embed2 = self.embeddings(input2)
         # out = self.linear1(torch.cat(((embed1*embed2), (embed1+embed2)/2), 2)).squeeze()
-        out = self.linear1(torch.cat(((embed1*embed2), (embed1+embed2)), 2)).squeeze()
+        out = self.linear1(torch.cat(((embed1+embed2), (embed1*embed2)), 2)).squeeze()
         out = self.relu(out)
         out = self.dropout(out)
         out= self.linear2(out)
