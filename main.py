@@ -807,11 +807,16 @@ def checkTensor():
     # Not related but close: 0.9696 -- 25e: 0.0.9845 -- 50e: 0.9833
     print(cos(torch.FloatTensor([float(i) for i in germany_german]), torch.FloatTensor([float(i) for i in china_beijing])))
 
+def testcorrectness():
+    tor1 = torch.LongTensor([[[1,2,3]],[[4,5,6]]])
+    tor2 = torch.LongTensor([[[10,20,30]],[[40,50,60]]])
+    print(torch.cat(((tor1+tor2), (tor1*tor2)), -1).squeeze())
 
 def main():
     trainmodel_getembedding()
 
 if __name__ == '__main__':
-    trainmodel_getembedding()
+    # trainmodel_getembedding()
+    testcorrectness()
     # checkTensor()
     # loadmodel_calculateembedding()
