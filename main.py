@@ -550,6 +550,9 @@ def loadmodel_calculateembedding():
     #     print(name, param.size())
     # print(modelstate)
     
+def cosadd(a, b, x, y):
+    cos = torch.nn.CosineSimilarity(dim = 0, eps = 1e-6)
+    return cos(b-a+x, y)
 
 def checkTensor():
     __PATH__ = './pretrainedmodel/'
@@ -800,11 +803,11 @@ def checkTensor():
     -0.0871673172580796".split()
     cos = torch.nn.CosineSimilarity(dim = 0, eps = 1e-6)
 
-    # Unrelated pair: 0.7621 -- 25e: 0.8928 -- 50e: 0.8974
+    # Unrelated pair: 0.7621 
     print(cos(torch.FloatTensor([float(i) for i in fresh_rotten]), torch.FloatTensor([float(i) for i in germany_berlin])))
-    # Related pair: 0.9781 -- 25e: 0.9873 -- 50e: 0.9845
+    # Related pair: 0.9781
     print(cos(torch.FloatTensor([float(i) for i in germany_berlin]), torch.FloatTensor([float(i) for i in china_beijing])))
-    # Not related but close: 0.9696 -- 25e: 0.0.9845 -- 50e: 0.9833
+    # Not related but close: 0.9696
     print(cos(torch.FloatTensor([float(i) for i in germany_german]), torch.FloatTensor([float(i) for i in china_beijing])))
 
 def testcorrectness():
