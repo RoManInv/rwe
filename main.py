@@ -31,7 +31,7 @@ def trainmodel_getembedding():
     parser.add_argument('-devsize', '--devsize', help='Size of development data (proportion with respect to the full training set, from 0 to 1)', required=False, default=0.015)
     parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
     # parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
-    parser.add_argument('-model', '--output_model', help='True for output model, False for output pretrained word embeddings', required=True, 
+    parser.add_argument('-model', '--output_model', help='True for output model, False for output pretrained word embeddings', required=True, type = bool
         choices=('True','False'), default=True)
     parser.add_argument('-hp', '--hyperparameters', help='Output path to store the output hyperparameters, until folder', required=True)
 
@@ -49,6 +49,7 @@ def trainmodel_getembedding():
     model = bool(args['output_model'])
     hp_path=args['hyperparameters']
 
+    print(model)
     if(isinstance(model, str)):
         if(model=='True'):
             model=True
