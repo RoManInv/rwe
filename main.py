@@ -32,7 +32,7 @@ def trainmodel_getembedding():
     parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
     # parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
     parser.add_argument('-model', '--output_model', help='True for output model, False for output pretrained word embeddings', required=True, type = bool, 
-            choices=('True','False'), default=True)
+            choices=(True,False), default=True)
     parser.add_argument('-hp', '--hyperparameters', help='Output path to store the output hyperparameters, until folder', required=True)
 
     args = vars(parser.parse_args())
