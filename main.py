@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import argparse
 import sys
 import random
 from modeltraining.preprocessing import load_embeddings_filtered_byvocab
@@ -30,7 +31,8 @@ def trainmodel_getembedding():
     parser.add_argument('-devsize', '--devsize', help='Size of development data (proportion with respect to the full training set, from 0 to 1)', required=False, default=0.015)
     parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
     # parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
-    parser.add_argument('-model', '--output_model', help='True for output model, False for output pretrained word embeddings', required=True, default=True)
+    parser.add_argument('-model', '--output_model', help='True for output model, False for output pretrained word embeddings', required=True, 
+        action=argparse.BooleanOptionalAction)
     parser.add_argument('-hp', '--hyperparameters', help='Output path to store the output hyperparameters, until folder', required=True)
 
     args = vars(parser.parse_args())
