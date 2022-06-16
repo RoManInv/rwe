@@ -53,6 +53,7 @@ def trainmodel_getembedding():
         else:
             model=False
     
+    print(model)
     if(model):
         print('Target: output model')
     else:
