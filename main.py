@@ -32,7 +32,7 @@ def trainmodel_getembedding():
     parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
     # parser.add_argument("-lr", '--learning_rate', help='Learning rate for training', required=False, default=0.01)
     parser.add_argument('-model', '--output_model', help='True for output model, False for output pretrained word embeddings', required=True, 
-        action=argparse.BooleanOptionalAction)
+        action=argparse.BooleanOptionalAction, choices=('True','False'), default=True)
     parser.add_argument('-hp', '--hyperparameters', help='Output path to store the output hyperparameters, until folder', required=True)
 
     args = vars(parser.parse_args())
@@ -49,7 +49,7 @@ def trainmodel_getembedding():
     model = bool(args['output_model'])
     hp_path=args['hyperparameters']
 
-    if(type(model) is str):
+    if(isinstance(model, str)):
         if(model=='True'):
             model=True
         else:
