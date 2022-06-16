@@ -46,6 +46,18 @@ def trainmodel_getembedding():
     lr=float(args['learning_rate'])
     model = bool(args['output_model'])
     hp_path=args['hyperparameters']
+
+    if(type(model) is str):
+        if(model=='True'):
+            model=True
+        else:
+            model=False
+    
+    if(model):
+        print('Target: output model')
+    else:
+        print('Target: output pretrained word embeddings')
+
     if devsize>=1 or devsize<0: sys.exit("Development data should be between 0% (0.0) and 100% (1.0) of the training data")
 
     print ("Loading word vocabulary...")
